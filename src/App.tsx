@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { IdeaProvider } from "@/contexts/IdeaContext";
+import { ThoughtProvider } from "@/contexts/ThoughtContext";
 
 // Pages
 import Index from "./pages/Index";
@@ -14,6 +15,9 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import NewIdea from "./pages/NewIdea";
 import EditIdea from "./pages/EditIdea";
+import Thoughts from "./pages/Thoughts";
+import NewThought from "./pages/NewThought";
+import EditThought from "./pages/EditThought";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -69,6 +73,30 @@ const AppRoutes = () => {
           </ProtectedRoute>
         } 
       />
+      <Route 
+        path="/thoughts" 
+        element={
+          <ProtectedRoute>
+            <Thoughts />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/new-thought" 
+        element={
+          <ProtectedRoute>
+            <NewThought />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/edit-thought/:id" 
+        element={
+          <ProtectedRoute>
+            <EditThought />
+          </ProtectedRoute>
+        } 
+      />
       
       {/* Catch-all route */}
       <Route path="*" element={<NotFound />} />
@@ -81,11 +109,13 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <IdeaProvider>
-          <Toaster />
-          <Sonner position="top-right" />
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
+          <ThoughtProvider>
+            <Toaster />
+            <Sonner position="top-right" />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ThoughtProvider>
         </IdeaProvider>
       </AuthProvider>
     </TooltipProvider>

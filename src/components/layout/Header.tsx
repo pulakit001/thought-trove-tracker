@@ -6,9 +6,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   LogOut,
   Menu,
-  X,
   LightbulbIcon,
-  PackageOpen
+  PackageOpen,
+  BrainCircuit
 } from "lucide-react";
 import {
   Sheet,
@@ -32,19 +32,30 @@ const Header: React.FC = () => {
   };
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return location.pathname === path ||
+      (path !== "/dashboard" && path !== "/thoughts" && location.pathname.startsWith(path));
   };
 
   const menuItems = [
     {
-      label: "Dashboard",
+      label: "Ideas",
       path: "/dashboard",
       icon: <PackageOpen className="w-5 h-5 mr-2" />,
+    },
+    {
+      label: "Thoughts",
+      path: "/thoughts",
+      icon: <BrainCircuit className="w-5 h-5 mr-2" />,
     },
     {
       label: "New Idea",
       path: "/new",
       icon: <LightbulbIcon className="w-5 h-5 mr-2" />,
+    },
+    {
+      label: "New Thought",
+      path: "/new-thought",
+      icon: <BrainCircuit className="w-5 h-5 mr-2" />,
     },
   ];
 
