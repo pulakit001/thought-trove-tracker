@@ -16,7 +16,9 @@ const NewThought: React.FC = () => {
           </p>
         </AnimatedContainer>
 
-        <ThoughtForm mode="create" />
+        <AnimatedContainer animation="slide-up" className="enhanced-container bg-card p-6">
+          <ThoughtForm mode="create" />
+        </AnimatedContainer>
       </main>
     </div>
   );

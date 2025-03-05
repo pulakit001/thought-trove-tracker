@@ -16,7 +16,9 @@ const NewIdea: React.FC = () => {
           </p>
         </AnimatedContainer>
 
-        <IdeaForm mode="create" />
+        <AnimatedContainer animation="slide-up" className="enhanced-container bg-card p-6">
+          <IdeaForm mode="create" />
+        </AnimatedContainer>
       </main>
     </div>
   );

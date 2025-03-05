@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { useIdeas, Idea } from "@/contexts/IdeaContext";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
 import { LucideLoader2, Save } from "lucide-react";
+import VoiceRecorder from "@/components/ui/VoiceRecorder";
+import { toast } from "sonner";
 
 interface IdeaFormProps {
   mode: "create" | "edit";
@@ -41,8 +43,39 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
     }
   };
 
+  const processTranscription = (text: string) => {
+    if (!text) return;
+    
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    
+    if (sentences.length > 0) {
+      // Use first sentence or portion as title (up to 60 chars)
+      const titleText = sentences[0].trim();
+      setTitle(titleText.length > 60 ? titleText.substring(0, 57) + "..." : titleText);
+      
+      // Use full text as description
+      setDescription(text);
+      
+      toast.success("Voice recording transcribed successfully!");
+      
+      // Auto-save if in create mode
+      if (mode === "create") {
+        setTimeout(async () => {
+          try {
+            await addIdea(titleText.length > 60 ? titleText.substring(0, 57) + "..." : titleText, text);
+            toast.success("Idea saved automatically!");
+            navigate("/dashboard");
+          } catch (error) {
+            console.error("Failed to auto-save idea:", error);
+            toast.error("Failed to auto-save. Please save manually.");
+          }
+        }, 1000);
+      }
+    }
+  };
+
   return (
-    <AnimatedContainer animation="fade" className="w-full">
+    <AnimatedContainer animation="fade" className="w-full relative">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
@@ -52,7 +85,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="h-12"
+            className="h-12 enhanced-input"
           />
         </div>
         
@@ -64,7 +97,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-            className="min-h-[200px] resize-none"
+            className="min-h-[200px] resize-none enhanced-input"
           />
         </div>
         
@@ -73,7 +106,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
             type="button" 
             variant="outline"
             onClick={() => navigate("/dashboard")}
-            className="px-6"
+            className="px-6 enhanced-container"
           >
             Cancel
           </Button>
@@ -81,7 +114,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="px-6"
+            className="px-6 enhanced-container"
           >
             {isSubmitting ? (
               <>
@@ -97,6 +130,11 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
           </Button>
         </div>
       </form>
+      
+      {/* Voice recorder floating action button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <VoiceRecorder onTranscriptionComplete={processTranscription} />
+      </div>
     </AnimatedContainer>
   );
 };
