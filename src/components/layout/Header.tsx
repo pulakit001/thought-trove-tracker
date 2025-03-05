@@ -64,7 +64,7 @@ const Header: React.FC = () => {
       <div className="container flex h-16 items-center justify-between py-4">
         <Link to="/" className="flex items-center gap-2">
           <LightbulbIcon className="w-6 h-6 text-primary" />
-          <span className="font-medium text-xl">Thought Trove</span>
+          <span className="font-medium text-xl">Sparky</span>
         </Link>
 
         {user && (
