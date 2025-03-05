@@ -19,8 +19,23 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock user database
-const MOCK_USERS: Record<string, User & { password: string }> = {};
+// Persistent mock user database between sessions
+let MOCK_USERS: Record<string, User & { password: string }> = {};
+
+// Load saved users from localStorage on initial load
+try {
+  const savedUsers = localStorage.getItem("savedUsers");
+  if (savedUsers) {
+    MOCK_USERS = JSON.parse(savedUsers);
+  }
+} catch (error) {
+  console.error("Failed to load saved users:", error);
+}
+
+// Helper function to save users to localStorage
+const saveUsersToStorage = () => {
+  localStorage.setItem("savedUsers", JSON.stringify(MOCK_USERS));
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -89,6 +104,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const newUser = { id, email, name, password };
       MOCK_USERS[id] = newUser;
       
+      // Save updated users to localStorage
+      saveUsersToStorage();
+      
       const { password: _, ...userWithoutPassword } = newUser;
       
       // Set user in state and localStorage
@@ -106,6 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    // We're NOT clearing ideas/thoughts from localStorage anymore
     toast.success("Logged out successfully");
   };
 
