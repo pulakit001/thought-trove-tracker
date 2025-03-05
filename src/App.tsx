@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { IdeaProvider } from "@/contexts/IdeaContext";
 import { ThoughtProvider } from "@/contexts/ThoughtContext";
+import MobileNav from "@/components/layout/MobileNav";
 
 // Pages
 import Index from "./pages/Index";
@@ -42,65 +43,71 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const AppRoutes = () => {
+  const { isAuthenticated } = useAuth();
+  
   return (
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        
+        {/* Protected routes */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/new" 
+          element={
+            <ProtectedRoute>
+              <NewIdea />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/edit/:id" 
+          element={
+            <ProtectedRoute>
+              <EditIdea />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/thoughts" 
+          element={
+            <ProtectedRoute>
+              <Thoughts />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/new-thought" 
+          element={
+            <ProtectedRoute>
+              <NewThought />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/edit-thought/:id" 
+          element={
+            <ProtectedRoute>
+              <EditThought />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Catch-all route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       
-      {/* Protected routes */}
-      <Route 
-        path="/dashboard" 
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/new" 
-        element={
-          <ProtectedRoute>
-            <NewIdea />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/edit/:id" 
-        element={
-          <ProtectedRoute>
-            <EditIdea />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/thoughts" 
-        element={
-          <ProtectedRoute>
-            <Thoughts />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/new-thought" 
-        element={
-          <ProtectedRoute>
-            <NewThought />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/edit-thought/:id" 
-        element={
-          <ProtectedRoute>
-            <EditThought />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* Catch-all route */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+      {isAuthenticated && <MobileNav />}
+    </>
   );
 };
 

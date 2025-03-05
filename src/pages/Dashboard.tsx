@@ -11,7 +11,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container py-8">
+      <main className="flex-1 container py-8 pb-24 md:pb-8">
         <AnimatedContainer animation="fade" className="mb-8">
           <h1 className="text-3xl font-bold">My Ideas</h1>
           <p className="text-muted-foreground">
