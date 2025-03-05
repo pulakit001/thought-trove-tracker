@@ -46,31 +46,27 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ mode, idea }) => {
   const processTranscription = (text: string) => {
     if (!text) return;
     
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    // Set the entire transcription as the description
+    setDescription(text);
     
-    if (sentences.length > 0) {
-      // Use first sentence or portion as title (up to 60 chars)
-      const titleText = sentences[0].trim();
-      setTitle(titleText.length > 60 ? titleText.substring(0, 57) + "..." : titleText);
-      
-      // Use full text as description
-      setDescription(text);
-      
-      toast.success("Voice recording transcribed successfully!");
-      
-      // Auto-save if in create mode
-      if (mode === "create") {
-        setTimeout(async () => {
-          try {
-            await addIdea(titleText.length > 60 ? titleText.substring(0, 57) + "..." : titleText, text);
-            toast.success("Idea saved automatically!");
-            navigate("/dashboard");
-          } catch (error) {
-            console.error("Failed to auto-save idea:", error);
-            toast.error("Failed to auto-save. Please save manually.");
-          }
-        }, 1000);
-      }
+    // For the title, use a generic title with timestamp
+    const now = new Date();
+    setTitle(`Voice Note (${now.toLocaleTimeString()})`);
+    
+    toast.success("Voice recording transcribed");
+    
+    // Auto-save if in create mode
+    if (mode === "create") {
+      setTimeout(async () => {
+        try {
+          await addIdea(`Voice Note (${now.toLocaleTimeString()})`, text);
+          toast.success("Idea saved automatically");
+          navigate("/dashboard");
+        } catch (error) {
+          console.error("Failed to auto-save idea:", error);
+          toast.error("Failed to auto-save. Please save manually.");
+        }
+      }, 1000);
     }
   };
 

@@ -54,6 +54,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
                 const data = await response.json();
                 
                 if (data.text) {
+                  // Pass the raw text directly to the handler without any processing
                   onTranscriptionComplete(data.text);
                 } else {
                   toast.error("Failed to transcribe audio");

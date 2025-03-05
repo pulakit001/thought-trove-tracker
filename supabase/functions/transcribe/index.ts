@@ -57,6 +57,8 @@ serve(async (req) => {
     const blob = new Blob([binaryAudio], { type: 'audio/webm' });
     formData.append('file', blob, 'audio.webm');
     formData.append('model', 'whisper-1');
+    // Request raw transcription without formatting
+    formData.append('response_format', 'text');
 
     // Send to OpenAI
     const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
@@ -71,10 +73,11 @@ serve(async (req) => {
       throw new Error(`OpenAI API error: ${await response.text()}`);
     }
 
-    const result = await response.json();
+    // Get raw text response instead of JSON
+    const rawText = await response.text();
 
     return new Response(
-      JSON.stringify({ text: result.text }),
+      JSON.stringify({ text: rawText }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
