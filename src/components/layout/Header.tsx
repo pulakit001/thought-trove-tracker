@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { LightbulbIcon, LogOut, User } from "lucide-react";
+import { LightbulbIcon, LogOut, User, Sparkles, BrainCircuit } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
@@ -25,6 +25,30 @@ const Header: React.FC = () => {
             IdeasApp
           </span>
         </Link>
+
+        <div className="hidden md:flex items-center space-x-4">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/dashboard")}
+          >
+            <LightbulbIcon className="h-4 w-4 mr-2" />
+            Ideas
+          </Button>
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/thoughts")}
+          >
+            <BrainCircuit className="h-4 w-4 mr-2" />
+            Thoughts
+          </Button>
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/ai")}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            AI
+          </Button>
+        </div>
 
         <div className="flex items-center gap-2">
           {/* Theme Toggle */}

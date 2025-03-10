@@ -20,6 +20,7 @@ import EditIdea from "./pages/EditIdea";
 import Thoughts from "./pages/Thoughts";
 import NewThought from "./pages/NewThought";
 import EditThought from "./pages/EditThought";
+import AI from "./pages/AI";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -99,6 +100,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <EditThought />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/ai" 
+          element={
+            <ProtectedRoute>
+              <AI />
             </ProtectedRoute>
           } 
         />
