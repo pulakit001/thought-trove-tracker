@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -200,15 +199,27 @@
 
   /* Enhanced container styling with thicker borders */
   .enhanced-container {
-    @apply border-2 border-border shadow-sm rounded-lg high-contrast:border-primary/70;
+    @apply border-2 border-border shadow-sm rounded-lg;
+  }
+  
+  .high-contrast .enhanced-container {
+    @apply border-primary border-2;
   }
   
   .enhanced-input {
-    @apply border-2 focus:border-primary/70 high-contrast:border-primary/70;
+    @apply border-2 focus:border-primary/70;
+  }
+  
+  .high-contrast .enhanced-input {
+    @apply border-primary;
   }
   
   .enhanced-card {
-    @apply border-2 shadow-md high-contrast:border-primary/70;
+    @apply border-2 shadow-md;
+  }
+  
+  .high-contrast .enhanced-card {
+    @apply border-primary;
   }
 }
 
