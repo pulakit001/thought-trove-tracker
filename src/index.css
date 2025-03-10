@@ -73,6 +73,54 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-primary-foreground: 222.2 47.4% 11.2%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 212.7 26.8% 83.9%;
+  }
+  
+  .high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 80%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 40%;
+    --input: 0 0% 40%;
+    --ring: 0 0% 100%;
+    
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 40%;
+    --sidebar-ring: 0 0% 100%;
   }
 }
 
@@ -106,15 +154,32 @@
     background: hsl(var(--muted));
     border-radius: 3px;
   }
+  
+  /* High contrast specific overrides */
+  .high-contrast button {
+    @apply border-2 border-primary;
+  }
+  
+  .high-contrast input, 
+  .high-contrast textarea {
+    @apply border-2 border-border;
+  }
+  
+  .high-contrast a:focus,
+  .high-contrast button:focus,
+  .high-contrast input:focus,
+  .high-contrast textarea:focus {
+    @apply outline-2 outline-primary outline-offset-2;
+  }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm;
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm dark:bg-black/50 dark:border-white/10 high-contrast:bg-black high-contrast:border-white/40;
   }
   
   .glass-dark {
-    @apply bg-black/50 backdrop-blur-md border border-white/10 shadow-md;
+    @apply bg-black/50 backdrop-blur-md border border-white/10 shadow-md dark:bg-black/70 high-contrast:bg-black high-contrast:border-white/40;
   }
   
   .card-hover {
@@ -126,7 +191,7 @@
   }
   
   .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 high-contrast:focus-visible:ring-primary high-contrast:focus-visible:ring-offset-4;
   }
   
   .page-container {
@@ -135,15 +200,15 @@
 
   /* Enhanced container styling with thicker borders */
   .enhanced-container {
-    @apply border-2 border-border shadow-sm rounded-lg;
+    @apply border-2 border-border shadow-sm rounded-lg high-contrast:border-primary/70;
   }
   
   .enhanced-input {
-    @apply border-2 focus:border-primary/70;
+    @apply border-2 focus:border-primary/70 high-contrast:border-primary/70;
   }
   
   .enhanced-card {
-    @apply border-2 shadow-md;
+    @apply border-2 shadow-md high-contrast:border-primary/70;
   }
 }
 

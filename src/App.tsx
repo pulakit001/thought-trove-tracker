@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { IdeaProvider } from "@/contexts/IdeaContext";
 import { ThoughtProvider } from "@/contexts/ThoughtContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import MobileNav from "@/components/layout/MobileNav";
 
 // Pages
@@ -114,17 +115,19 @@ const AppRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider>
-        <IdeaProvider>
-          <ThoughtProvider>
-            <Toaster />
-            <Sonner position="top-right" />
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
-          </ThoughtProvider>
-        </IdeaProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <IdeaProvider>
+            <ThoughtProvider>
+              <Toaster />
+              <Sonner position="top-right" />
+              <BrowserRouter>
+                <AppRoutes />
+              </BrowserRouter>
+            </ThoughtProvider>
+          </IdeaProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
