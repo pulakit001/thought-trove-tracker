@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -19,22 +18,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Persistent mock user database between sessions
-let MOCK_USERS: Record<string, User & { password: string }> = {};
-
-// Load saved users from localStorage on initial load
-try {
-  const savedUsers = localStorage.getItem("savedUsers");
-  if (savedUsers) {
-    MOCK_USERS = JSON.parse(savedUsers);
-  }
-} catch (error) {
-  console.error("Failed to load saved users:", error);
-}
-
-// Helper function to save users to localStorage
-const saveUsersToStorage = () => {
-  localStorage.setItem("savedUsers", JSON.stringify(MOCK_USERS));
+// Default local user - everyone uses the same local account
+const LOCAL_USER: User = {
+  id: "local_user",
+  email: "local@user.com",
+  name: "Local User"
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -42,90 +30,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Check for existing user in localStorage (simulating persistent auth)
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error("Failed to parse stored user:", error);
-        localStorage.removeItem("user");
-      }
-    }
+    // Automatically set the local user as authenticated
+    setUser(LOCAL_USER);
     setLoading(false);
   }, []);
 
+  // These functions are kept for compatibility but don't do anything
   const login = async (email: string, password: string) => {
-    setLoading(true);
-
-    try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Find user with matching email
-      const userIds = Object.keys(MOCK_USERS);
-      const matchingUserId = userIds.find(id => MOCK_USERS[id].email === email);
-      
-      if (!matchingUserId || MOCK_USERS[matchingUserId].password !== password) {
-        throw new Error("Invalid credentials");
-      }
-      
-      const { password: _, ...userWithoutPassword } = MOCK_USERS[matchingUserId];
-      
-      // Set user in state and localStorage
-      setUser(userWithoutPassword);
-      localStorage.setItem("user", JSON.stringify(userWithoutPassword));
-      toast.success("Successfully logged in");
-    } catch (error) {
-      toast.error("Login failed: " + (error instanceof Error ? error.message : "Unknown error"));
-      throw error;
-    } finally {
-      setLoading(false);
-    }
+    setUser(LOCAL_USER);
   };
 
   const signup = async (email: string, password: string, name: string) => {
-    setLoading(true);
-
-    try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Check if email already exists
-      const userIds = Object.keys(MOCK_USERS);
-      const emailExists = userIds.some(id => MOCK_USERS[id].email === email);
-      
-      if (emailExists) {
-        throw new Error("Email already in use");
-      }
-      
-      // Create new user
-      const id = `user_${Date.now()}`;
-      const newUser = { id, email, name, password };
-      MOCK_USERS[id] = newUser;
-      
-      // Save updated users to localStorage
-      saveUsersToStorage();
-      
-      const { password: _, ...userWithoutPassword } = newUser;
-      
-      // Set user in state and localStorage
-      setUser(userWithoutPassword);
-      localStorage.setItem("user", JSON.stringify(userWithoutPassword));
-      toast.success("Account created successfully");
-    } catch (error) {
-      toast.error("Signup failed: " + (error instanceof Error ? error.message : "Unknown error"));
-      throw error;
-    } finally {
-      setLoading(false);
-    }
+    setUser(LOCAL_USER);
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    // We're NOT clearing ideas/thoughts from localStorage anymore
-    toast.success("Logged out successfully");
+    // Do nothing - user stays logged in locally
   };
 
   return (
@@ -136,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         signup,
         logout,
-        isAuthenticated: !!user,
+        isAuthenticated: true, // Always authenticated locally
       }}
     >
       {children}
