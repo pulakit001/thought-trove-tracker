@@ -39,15 +39,11 @@ const SignupForm: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      const result = await signup(email, password, name);
-      
-      if (!result.error) {
-        console.log("Signup successful, navigating to dashboard");
-        navigate("/dashboard");
-      }
+      await signup(email, password, name);
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Signup form error:", error);
-      toast.error("An unexpected error occurred");
+      // Error is already handled in the AuthContext
+      console.error(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -66,7 +62,6 @@ const SignupForm: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
             required
             className="h-12"
-            disabled={isSubmitting}
           />
         </div>
         
@@ -80,7 +75,6 @@ const SignupForm: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
             className="h-12"
-            disabled={isSubmitting}
           />
         </div>
         
@@ -94,7 +88,6 @@ const SignupForm: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
             className="h-12"
-            disabled={isSubmitting}
           />
         </div>
         
@@ -108,7 +101,6 @@ const SignupForm: React.FC = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
             className="h-12"
-            disabled={isSubmitting}
           />
         </div>
         

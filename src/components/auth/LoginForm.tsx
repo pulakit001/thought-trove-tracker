@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,21 @@ const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [savedEmails, setSavedEmails] = useState<string[]>([]);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Load previously used emails
+  useEffect(() => {
+    try {
+      const storedEmails = localStorage.getItem("savedEmails");
+      if (storedEmails) {
+        setSavedEmails(JSON.parse(storedEmails));
+      }
+    } catch (error) {
+      console.error("Failed to load saved emails:", error);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,18 +40,26 @@ const LoginForm: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      const result = await login(email, password);
+      await login(email, password);
       
-      if (!result.error) {
-        console.log("Login successful, navigating to dashboard");
-        navigate("/dashboard");
+      // Save email for future logins if it's not already saved
+      if (!savedEmails.includes(email)) {
+        const updatedEmails = [...savedEmails, email];
+        setSavedEmails(updatedEmails);
+        localStorage.setItem("savedEmails", JSON.stringify(updatedEmails));
       }
+      
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Login form error:", error);
-      toast.error("An unexpected error occurred");
+      // Error is already handled in the AuthContext
+      console.error(error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSelectEmail = (selectedEmail: string) => {
+    setEmail(selectedEmail);
   };
 
   return (
@@ -54,8 +75,27 @@ const LoginForm: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
             className="h-12"
-            disabled={isSubmitting}
           />
+          
+          {/* Show previously used emails */}
+          {savedEmails.length > 0 && email === "" && (
+            <div className="mt-2 p-2 border border-gray-200 rounded-md bg-gray-50">
+              <p className="text-sm text-muted-foreground mb-1">Previously used emails:</p>
+              <div className="space-y-1">
+                {savedEmails.map((savedEmail) => (
+                  <Button
+                    key={savedEmail}
+                    type="button"
+                    variant="ghost"
+                    className="w-full justify-start text-sm h-8 px-2"
+                    onClick={() => handleSelectEmail(savedEmail)}
+                  >
+                    {savedEmail}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="space-y-2">
@@ -70,7 +110,6 @@ const LoginForm: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
             className="h-12"
-            disabled={isSubmitting}
           />
         </div>
         

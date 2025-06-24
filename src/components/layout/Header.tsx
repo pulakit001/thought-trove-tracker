@@ -1,30 +1,30 @@
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LightbulbIcon, Sparkles, BrainCircuit, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { LightbulbIcon, LogOut, User, Sparkles, BrainCircuit } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Header: React.FC = () => {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { logout, user } = useAuth();
 
   const handleLogout = async () => {
     await logout();
-    navigate("/");
+    navigate("/login");
   };
 
   return (
     <AnimatedContainer animation="fade" className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center cursor-pointer" onClick={() => navigate("/dashboard")}>
+        <Link to="/" className="flex items-center">
           <LightbulbIcon className="h-6 w-6 text-primary mr-2" />
           <span className="font-bold text-xl hidden sm:inline-block">
             IdeasApp
           </span>
-        </div>
+        </Link>
 
         <div className="hidden md:flex items-center space-x-4">
           <Button 
@@ -51,20 +51,31 @@ const Header: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {user && (
-            <span className="text-sm text-muted-foreground hidden sm:inline-block">
-              {user.email}
-            </span>
-          )}
+          {/* Theme Toggle */}
           <ThemeToggle />
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={handleLogout}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
+          
+          {user && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                className="h-10 w-10"
+              >
+                <LogOut className="h-5 w-5" />
+                <span className="sr-only">Logout</span>
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10 rounded-full border-2"
+              >
+                <User className="h-5 w-5" />
+                <span className="sr-only">Account</span>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </AnimatedContainer>
