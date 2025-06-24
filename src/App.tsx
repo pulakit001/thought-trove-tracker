@@ -9,8 +9,12 @@ import { IdeaProvider } from "@/contexts/IdeaContext";
 import { ThoughtProvider } from "@/contexts/ThoughtContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import MobileNav from "@/components/layout/MobileNav";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 // Pages
+import Index from "./pages/Index";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import NewIdea from "./pages/NewIdea";
 import EditIdea from "./pages/EditIdea";
@@ -25,24 +29,56 @@ const AppRoutes = () => {
   return (
     <>
       <Routes>
-        {/* Redirect root to dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Public routes */}
+        <Route path="/" element={<Index />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         
-        {/* All routes are now unprotected since we removed auth */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/new" element={<NewIdea />} />
-        <Route path="/edit/:id" element={<EditIdea />} />
-        <Route path="/thoughts" element={<Thoughts />} />
-        <Route path="/new-thought" element={<NewThought />} />
-        <Route path="/edit-thought/:id" element={<EditThought />} />
-        <Route path="/ai" element={<AI />} />
+        {/* Protected routes */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/new" element={
+          <ProtectedRoute>
+            <NewIdea />
+          </ProtectedRoute>
+        } />
+        <Route path="/edit/:id" element={
+          <ProtectedRoute>
+            <EditIdea />
+          </ProtectedRoute>
+        } />
+        <Route path="/thoughts" element={
+          <ProtectedRoute>
+            <Thoughts />
+          </ProtectedRoute>
+        } />
+        <Route path="/new-thought" element={
+          <ProtectedRoute>
+            <NewThought />
+          </ProtectedRoute>
+        } />
+        <Route path="/edit-thought/:id" element={
+          <ProtectedRoute>
+            <EditThought />
+          </ProtectedRoute>
+        } />
+        <Route path="/ai" element={
+          <ProtectedRoute>
+            <AI />
+          </ProtectedRoute>
+        } />
         
-        {/* Catch-all route redirects to dashboard */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        {/* Catch-all route redirects to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       
-      {/* Always show mobile nav since everyone is "authenticated" */}
-      <MobileNav />
+      {/* Show mobile nav only when authenticated */}
+      <ProtectedRoute>
+        <MobileNav />
+      </ProtectedRoute>
     </>
   );
 };

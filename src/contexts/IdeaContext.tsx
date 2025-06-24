@@ -1,6 +1,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "./AuthContext";
 
 export interface Idea {
   id: string;
@@ -22,47 +24,89 @@ interface IdeaContextType {
 
 const IdeaContext = createContext<IdeaContextType | undefined>(undefined);
 
-// Mock database
-const MOCK_IDEAS: Record<string, Idea> = {};
-
 export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { user, isAuthenticated } = useAuth();
 
-  // Load ideas from localStorage on mount
+  // Load ideas when user is authenticated
   useEffect(() => {
-    loadIdeas();
-  }, []);
+    if (isAuthenticated && user) {
+      loadIdeas();
+      migrateLocalStorageData();
+    } else {
+      setIdeas([]);
+      setLoading(false);
+    }
+  }, [isAuthenticated, user]);
 
-  const loadIdeas = async () => {
-    setLoading(true);
+  const migrateLocalStorageData = async () => {
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Get ideas from localStorage or create empty array
       const storedIdeas = localStorage.getItem("ideas");
-      let parsedIdeas: Record<string, Idea> = {};
-      
-      if (storedIdeas) {
-        try {
-          parsedIdeas = JSON.parse(storedIdeas);
-        } catch (error) {
-          console.error("Failed to parse stored ideas:", error);
+      if (storedIdeas && user) {
+        const parsedIdeas: Record<string, Idea> = JSON.parse(storedIdeas);
+        const ideasArray = Object.values(parsedIdeas);
+        
+        if (ideasArray.length > 0) {
+          console.log("Migrating", ideasArray.length, "ideas from localStorage to Supabase");
+          
+          for (const idea of ideasArray) {
+            // Check if idea already exists in Supabase
+            const { data: existingIdea } = await supabase
+              .from('ideas')
+              .select('id')
+              .eq('title', idea.title)
+              .eq('description', idea.description)
+              .single();
+            
+            if (!existingIdea) {
+              await supabase.from('ideas').insert({
+                title: idea.title,
+                description: idea.description,
+                user_id: user.id,
+                created_at: idea.createdAt,
+                updated_at: idea.updatedAt,
+              });
+            }
+          }
+          
+          // Clear localStorage after successful migration
           localStorage.removeItem("ideas");
+          toast.success("Successfully migrated your ideas to the cloud!");
+          
+          // Reload ideas to show migrated data
+          loadIdeas();
         }
       }
-      
-      // Merge with mock ideas
-      Object.assign(MOCK_IDEAS, parsedIdeas);
-      
-      // Get all ideas (no user filtering needed now)
-      const allIdeas = Object.values(MOCK_IDEAS);
-      
-      // Sort by creation date (newest first)
-      allIdeas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      
-      setIdeas(allIdeas);
+    } catch (error) {
+      console.error("Error migrating localStorage data:", error);
+      toast.error("Error migrating your local data");
+    }
+  };
+
+  const loadIdeas = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('ideas')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const formattedIdeas = data.map(idea => ({
+        id: idea.id,
+        title: idea.title,
+        description: idea.description || '',
+        createdAt: idea.created_at,
+        updatedAt: idea.updated_at,
+        userId: idea.user_id,
+      }));
+
+      setIdeas(formattedIdeas);
     } catch (error) {
       toast.error("Failed to load ideas");
       console.error(error);
@@ -71,33 +115,33 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const saveIdeasToStorage = () => {
-    localStorage.setItem("ideas", JSON.stringify(MOCK_IDEAS));
-  };
-
   const addIdea = async (title: string, description: string): Promise<Idea> => {
+    if (!user) throw new Error("User not authenticated");
+    
     setLoading(true);
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      const now = new Date().toISOString();
+      const { data, error } = await supabase
+        .from('ideas')
+        .insert({
+          title,
+          description,
+          user_id: user.id,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
       const newIdea: Idea = {
-        id: `idea_${Date.now()}`,
-        title,
-        description,
-        createdAt: now,
-        updatedAt: now,
-        userId: "local_user", // Always use local user
+        id: data.id,
+        title: data.title,
+        description: data.description || '',
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        userId: data.user_id,
       };
-      
-      // Add to mock database
-      MOCK_IDEAS[newIdea.id] = newIdea;
-      saveIdeasToStorage();
-      
-      // Update state
+
       setIdeas(prev => [newIdea, ...prev]);
-      
       toast.success("Idea created successfully");
       return newIdea;
     } catch (error) {
@@ -110,35 +154,38 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateIdea = async (id: string, title: string, description: string): Promise<Idea> => {
+    if (!user) throw new Error("User not authenticated");
+    
     setLoading(true);
     try {
-      // Check if idea exists
-      const idea = MOCK_IDEAS[id];
-      if (!idea) throw new Error("Idea not found");
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      // Update idea
-      const now = new Date().toISOString();
+      const { data, error } = await supabase
+        .from('ideas')
+        .update({
+          title,
+          description,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .eq('user_id', user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
       const updatedIdea: Idea = {
-        ...idea,
-        title,
-        description,
-        updatedAt: now,
+        id: data.id,
+        title: data.title,
+        description: data.description || '',
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        userId: data.user_id,
       };
-      
-      // Update mock database
-      MOCK_IDEAS[id] = updatedIdea;
-      saveIdeasToStorage();
-      
-      // Update state
+
       setIdeas(prev => prev.map(item => (item.id === id ? updatedIdea : item)));
-      
       toast.success("Idea updated successfully");
       return updatedIdea;
     } catch (error) {
-      toast.error("Failed to update idea: " + (error instanceof Error ? error.message : "Unknown error"));
+      toast.error("Failed to update idea");
       console.error(error);
       throw error;
     } finally {
@@ -147,25 +194,22 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteIdea = async (id: string): Promise<void> => {
+    if (!user) throw new Error("User not authenticated");
+    
     setLoading(true);
     try {
-      // Check if idea exists
-      const idea = MOCK_IDEAS[id];
-      if (!idea) throw new Error("Idea not found");
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      // Delete from mock database
-      delete MOCK_IDEAS[id];
-      saveIdeasToStorage();
-      
-      // Update state
+      const { error } = await supabase
+        .from('ideas')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
       setIdeas(prev => prev.filter(item => item.id !== id));
-      
       toast.success("Idea deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete idea: " + (error instanceof Error ? error.message : "Unknown error"));
+      toast.error("Failed to delete idea");
       console.error(error);
       throw error;
     } finally {
@@ -174,7 +218,7 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getIdea = (id: string): Idea | undefined => {
-    return MOCK_IDEAS[id];
+    return ideas.find(idea => idea.id === id);
   };
 
   return (
