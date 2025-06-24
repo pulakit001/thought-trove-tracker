@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useAuth } from "./AuthContext";
 
 export interface Idea {
   id: string;
@@ -27,19 +26,13 @@ const IdeaContext = createContext<IdeaContextType | undefined>(undefined);
 const MOCK_IDEAS: Record<string, Idea> = {};
 
 export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Load ideas from localStorage when user changes
+  // Load ideas from localStorage on mount
   useEffect(() => {
-    if (user) {
-      loadIdeas();
-    } else {
-      setIdeas([]);
-      setLoading(false);
-    }
-  }, [user]);
+    loadIdeas();
+  }, []);
 
   const loadIdeas = async () => {
     setLoading(true);
@@ -63,15 +56,13 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Merge with mock ideas
       Object.assign(MOCK_IDEAS, parsedIdeas);
       
-      // Filter ideas for current user
-      const userIdeas = Object.values(MOCK_IDEAS).filter(
-        idea => user && idea.userId === user.id
-      );
+      // Get all ideas (no user filtering needed now)
+      const allIdeas = Object.values(MOCK_IDEAS);
       
       // Sort by creation date (newest first)
-      userIdeas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      allIdeas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      setIdeas(userIdeas);
+      setIdeas(allIdeas);
     } catch (error) {
       toast.error("Failed to load ideas");
       console.error(error);
@@ -85,8 +76,6 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const addIdea = async (title: string, description: string): Promise<Idea> => {
-    if (!user) throw new Error("You must be logged in to add an idea");
-    
     setLoading(true);
     try {
       // Simulate API delay
@@ -99,7 +88,7 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description,
         createdAt: now,
         updatedAt: now,
-        userId: user.id,
+        userId: "local_user", // Always use local user
       };
       
       // Add to mock database
@@ -121,14 +110,11 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateIdea = async (id: string, title: string, description: string): Promise<Idea> => {
-    if (!user) throw new Error("You must be logged in to update an idea");
-    
     setLoading(true);
     try {
-      // Check if idea exists and belongs to user
+      // Check if idea exists
       const idea = MOCK_IDEAS[id];
       if (!idea) throw new Error("Idea not found");
-      if (idea.userId !== user.id) throw new Error("You don't have permission to update this idea");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -161,14 +147,11 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteIdea = async (id: string): Promise<void> => {
-    if (!user) throw new Error("You must be logged in to delete an idea");
-    
     setLoading(true);
     try {
-      // Check if idea exists and belongs to user
+      // Check if idea exists
       const idea = MOCK_IDEAS[id];
       if (!idea) throw new Error("Idea not found");
-      if (idea.userId !== user.id) throw new Error("You don't have permission to delete this idea");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));

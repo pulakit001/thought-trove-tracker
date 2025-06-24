@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useAuth } from "./AuthContext";
 
 export interface Thought {
   id: string;
@@ -28,19 +27,13 @@ const ThoughtContext = createContext<ThoughtContextType | undefined>(undefined);
 const MOCK_THOUGHTS: Record<string, Thought> = {};
 
 export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
   const [thoughts, setThoughts] = useState<Thought[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Load thoughts from localStorage when user changes
+  // Load thoughts from localStorage on mount
   useEffect(() => {
-    if (user) {
-      loadThoughts();
-    } else {
-      setThoughts([]);
-      setLoading(false);
-    }
-  }, [user]);
+    loadThoughts();
+  }, []);
 
   const loadThoughts = async () => {
     setLoading(true);
@@ -64,15 +57,13 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
       // Merge with mock thoughts
       Object.assign(MOCK_THOUGHTS, parsedThoughts);
       
-      // Filter thoughts for current user
-      const userThoughts = Object.values(MOCK_THOUGHTS).filter(
-        thought => user && thought.userId === user.id
-      );
+      // Get all thoughts (no user filtering needed now)
+      const allThoughts = Object.values(MOCK_THOUGHTS);
       
       // Sort by creation date (newest first)
-      userThoughts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      allThoughts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      setThoughts(userThoughts);
+      setThoughts(allThoughts);
     } catch (error) {
       toast.error("Failed to load thoughts");
       console.error(error);
@@ -86,8 +77,6 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const addThought = async (title: string, description: string, location: string): Promise<Thought> => {
-    if (!user) throw new Error("You must be logged in to add a thought");
-    
     setLoading(true);
     try {
       // Simulate API delay
@@ -101,7 +90,7 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
         location,
         createdAt: now,
         updatedAt: now,
-        userId: user.id,
+        userId: "local_user", // Always use local user
       };
       
       // Add to mock database
@@ -123,14 +112,11 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const updateThought = async (id: string, title: string, description: string, location: string): Promise<Thought> => {
-    if (!user) throw new Error("You must be logged in to update a thought");
-    
     setLoading(true);
     try {
-      // Check if thought exists and belongs to user
+      // Check if thought exists
       const thought = MOCK_THOUGHTS[id];
       if (!thought) throw new Error("Thought not found");
-      if (thought.userId !== user.id) throw new Error("You don't have permission to update this thought");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -164,14 +150,11 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const deleteThought = async (id: string): Promise<void> => {
-    if (!user) throw new Error("You must be logged in to delete a thought");
-    
     setLoading(true);
     try {
-      // Check if thought exists and belongs to user
+      // Check if thought exists
       const thought = MOCK_THOUGHTS[id];
       if (!thought) throw new Error("Thought not found");
-      if (thought.userId !== user.id) throw new Error("You don't have permission to delete this thought");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
