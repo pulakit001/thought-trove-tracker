@@ -2,9 +2,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BrainCircuit, Sparkles } from "lucide-react";
+import { LightbulbIcon, BrainCircuit, Sparkles } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
-import BrandIcon from "@/components/ui/BrandIcon";
 
 const MobileNav: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +22,7 @@ const MobileNav: React.FC = () => {
           onClick={() => navigate("/dashboard")}
         >
           <div className="flex flex-col items-center gap-1">
-            <BrandIcon size={20} />
+            <LightbulbIcon className="w-5 h-5" />
             <span className="text-xs">Ideas</span>
           </div>
         </Button>

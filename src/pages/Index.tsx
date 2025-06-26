@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { ArrowRight, LightbulbIcon } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
 
 const Index: React.FC = () => {
@@ -17,68 +18,78 @@ const Index: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse text-gray-400">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse">Loading...</div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      {/* Subtle animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-60"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-40" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-32 left-1/4 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-50" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute bottom-20 right-1/3 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-30" style={{ animationDelay: '3s' }}></div>
-      </div>
-
-      <div className="max-w-md w-full text-center space-y-12">
-        {/* Logo */}
-        <AnimatedContainer animation="fade" className="flex justify-center">
-          <div className="w-16 h-16 flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/d42ddfd4-0236-42e7-acf6-a095e38ec479.png" 
-              alt="Sparky Logo" 
-              className="w-full h-full object-contain opacity-90"
-            />
+    <main className="min-h-screen flex flex-col">
+      <div className="container mx-auto flex-1 flex flex-col justify-center items-center px-4 py-16">
+        <AnimatedContainer animation="scale" className="text-center max-w-2xl">
+          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-6">
+            <LightbulbIcon className="w-8 h-8 text-primary" />
           </div>
-        </AnimatedContainer>
-
-        {/* Brand Name */}
-        <AnimatedContainer animation="slide-up" delay={200}>
-          <h1 className="text-6xl font-light text-gray-900 tracking-wide mb-4">
-            sparky.
-          </h1>
-          <p className="text-gray-500 text-lg font-light tracking-wide">
-            write without distraction.
-          </p>
-        </AnimatedContainer>
-
-        {/* Action Button */}
-        <AnimatedContainer animation="slide-up" delay={400} className="space-y-4">
-          <Button
-            onClick={() => navigate("/signup")}
-            size="lg"
-            className="w-full max-w-xs mx-auto h-12 text-base font-normal bg-gray-900 hover:bg-gray-800 text-white rounded-full border-0 transition-all duration-500 hover:scale-105 shadow-sm hover:shadow-md"
-          >
-            get started
-          </Button>
           
-          <div className="pt-4">
-            <button
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+            Capture Your Best Ideas Before They Disappear
+          </h1>
+          
+          <p className="text-xl text-muted-foreground mb-10 max-w-lg mx-auto">
+            A simple, intuitive app for storing, managing, and organizing your ideas securely.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
               onClick={() => navigate("/login")}
-              className="text-gray-500 hover:text-gray-700 text-sm font-light tracking-wide transition-colors duration-300 underline-offset-4 hover:underline"
+              size="lg"
+              className="text-base px-8"
             >
-              already have an account?
-            </button>
+              Sign In
+            </Button>
+            
+            <Button
+              onClick={() => navigate("/signup")}
+              variant="outline"
+              size="lg"
+              className="text-base px-8 group"
+            >
+              Create Account
+              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
           </div>
         </AnimatedContainer>
-      </div>
-
-      {/* Subtle footer */}
-      <div className="absolute bottom-8 text-xs text-gray-300 font-light tracking-widest">
-        focus • create • inspire
+        
+        <AnimatedContainer 
+          animation="fade" 
+          delay={300}
+          className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center sm:text-left"
+        >
+          <div className="space-y-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto sm:mx-0">
+              <LightbulbIcon className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-semibold text-lg">Quick Capture</h3>
+            <p className="text-muted-foreground">Save ideas instantly with our clean, distraction-free interface.</p>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto sm:mx-0">
+              <LightbulbIcon className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-semibold text-lg">Private & Secure</h3>
+            <p className="text-muted-foreground">Your ideas remain private with personal user accounts.</p>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto sm:mx-0">
+              <LightbulbIcon className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-semibold text-lg">Stay Organized</h3>
+            <p className="text-muted-foreground">Search, filter, and organize your ideas as your collection grows.</p>
+          </div>
+        </AnimatedContainer>
       </div>
     </main>
   );
