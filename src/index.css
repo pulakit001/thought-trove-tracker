@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -220,6 +221,15 @@
   
   .high-contrast .enhanced-card {
     @apply border-primary;
+  }
+
+  /* Glassmorphism utilities */
+  .glass-button {
+    @apply bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+  }
+  
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl;
   }
 }
 
