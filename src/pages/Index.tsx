@@ -3,8 +3,9 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { ArrowRight, LightbulbIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
+import BrandIcon from "@/components/ui/BrandIcon";
 
 const Index: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -29,7 +30,7 @@ const Index: React.FC = () => {
       <div className="container mx-auto flex-1 flex flex-col justify-center items-center px-4 py-16">
         <AnimatedContainer animation="scale" className="text-center max-w-2xl">
           <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-6">
-            <LightbulbIcon className="w-8 h-8 text-primary" />
+            <BrandIcon size={32} />
           </div>
           
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
@@ -68,7 +69,7 @@ const Index: React.FC = () => {
         >
           <div className="space-y-3">
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto sm:mx-0">
-              <LightbulbIcon className="w-6 h-6 text-primary" />
+              <BrandIcon size={24} />
             </div>
             <h3 className="font-semibold text-lg">Quick Capture</h3>
             <p className="text-muted-foreground">Save ideas instantly with our clean, distraction-free interface.</p>
@@ -76,7 +77,7 @@ const Index: React.FC = () => {
           
           <div className="space-y-3">
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto sm:mx-0">
-              <LightbulbIcon className="w-6 h-6 text-primary" />
+              <BrandIcon size={24} />
             </div>
             <h3 className="font-semibold text-lg">Private & Secure</h3>
             <p className="text-muted-foreground">Your ideas remain private with personal user accounts.</p>
@@ -84,7 +85,7 @@ const Index: React.FC = () => {
           
           <div className="space-y-3">
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto sm:mx-0">
-              <LightbulbIcon className="w-6 h-6 text-primary" />
+              <BrandIcon size={24} />
             </div>
             <h3 className="font-semibold text-lg">Stay Organized</h3>
             <p className="text-muted-foreground">Search, filter, and organize your ideas as your collection grows.</p>

@@ -2,10 +2,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LightbulbIcon, Sparkles, BrainCircuit, LogOut } from "lucide-react";
+import { Sparkles, BrainCircuit, LogOut } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
+import BrandIcon from "@/components/ui/BrandIcon";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Header: React.FC = () => {
     <AnimatedContainer animation="fade" className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center cursor-pointer" onClick={() => navigate("/dashboard")}>
-          <LightbulbIcon className="h-6 w-6 text-primary mr-2" />
+          <BrandIcon className="mr-2" size={24} />
           <span className="font-bold text-xl hidden sm:inline-block">
             IdeasApp
           </span>
@@ -31,7 +32,7 @@ const Header: React.FC = () => {
             variant="ghost" 
             onClick={() => navigate("/dashboard")}
           >
-            <LightbulbIcon className="h-4 w-4 mr-2" />
+            <BrandIcon className="mr-2" size={16} />
             Ideas
           </Button>
           <Button 

@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "@/components/auth/LoginForm";
 import { useAuth } from "@/contexts/AuthContext";
-import { LightbulbIcon } from "lucide-react";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
+import BrandIcon from "@/components/ui/BrandIcon";
 
 const Login: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
       <div className="w-full max-w-md">
         <AnimatedContainer animation="fade" className="text-center mb-8">
-          <LightbulbIcon className="w-12 h-12 text-primary mx-auto mb-4" />
+          <BrandIcon className="mx-auto mb-4" size={48} />
           <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
           <p className="text-muted-foreground">
             Sign in to access your ideas and notes
