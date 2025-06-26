@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
-import BrandIcon from "@/components/ui/BrandIcon";
 
 const Index: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -18,67 +17,68 @@ const Index: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-        <div className="animate-pulse text-white">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-pulse text-gray-400">Loading...</div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      {/* Subtle animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute top-40 right-20 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-40" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-32 left-1/4 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-50" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-20 right-1/3 w-1 h-1 bg-gray-200 rounded-full animate-pulse opacity-30" style={{ animationDelay: '3s' }}></div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16">
-        <AnimatedContainer animation="scale" className="text-center max-w-md w-full">
-          {/* Brand Icon */}
-          <div className="mb-8">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-md border border-white/30 shadow-2xl">
-              <BrandIcon size={48} className="text-white" />
-            </div>
-          </div>
-          
-          {/* Welcome Text */}
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight">
-            Welcome to
-          </h1>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Sparky
-          </h2>
-          
-          <p className="text-white/90 text-lg mb-12 leading-relaxed">
-            Write your ideas and thoughts in one place
-          </p>
-          
-          {/* Glassmorphism Buttons */}
-          <div className="space-y-4 w-full">
-            <AnimatedContainer animation="slide-up" delay={200}>
-              <Button
-                onClick={() => navigate("/signup")}
-                size="lg"
-                className="w-full h-14 text-lg font-semibold bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl rounded-2xl"
-                variant="outline"
-              >
-                Sign up
-              </Button>
-            </AnimatedContainer>
-            
-            <AnimatedContainer animation="slide-up" delay={300}>
-              <Button
-                onClick={() => navigate("/login")}
-                size="lg"
-                className="w-full h-14 text-lg font-semibold bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl rounded-2xl"
-                variant="outline"
-              >
-                Log in
-              </Button>
-            </AnimatedContainer>
+      <div className="max-w-md w-full text-center space-y-12">
+        {/* Logo */}
+        <AnimatedContainer animation="fade" className="flex justify-center">
+          <div className="w-16 h-16 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/d42ddfd4-0236-42e7-acf6-a095e38ec479.png" 
+              alt="Sparky Logo" 
+              className="w-full h-full object-contain opacity-90"
+            />
           </div>
         </AnimatedContainer>
+
+        {/* Brand Name */}
+        <AnimatedContainer animation="slide-up" delay={200}>
+          <h1 className="text-6xl font-light text-gray-900 tracking-wide mb-4">
+            sparky.
+          </h1>
+          <p className="text-gray-500 text-lg font-light tracking-wide">
+            write without distraction.
+          </p>
+        </AnimatedContainer>
+
+        {/* Action Button */}
+        <AnimatedContainer animation="slide-up" delay={400} className="space-y-4">
+          <Button
+            onClick={() => navigate("/signup")}
+            size="lg"
+            className="w-full max-w-xs mx-auto h-12 text-base font-normal bg-gray-900 hover:bg-gray-800 text-white rounded-full border-0 transition-all duration-500 hover:scale-105 shadow-sm hover:shadow-md"
+          >
+            get started
+          </Button>
+          
+          <div className="pt-4">
+            <button
+              onClick={() => navigate("/login")}
+              className="text-gray-500 hover:text-gray-700 text-sm font-light tracking-wide transition-colors duration-300 underline-offset-4 hover:underline"
+            >
+              already have an account?
+            </button>
+          </div>
+        </AnimatedContainer>
+      </div>
+
+      {/* Subtle footer */}
+      <div className="absolute bottom-8 text-xs text-gray-300 font-light tracking-widest">
+        focus • create • inspire
       </div>
     </main>
   );

@@ -223,14 +223,24 @@
     @apply border-primary;
   }
 
-  /* Glassmorphism utilities */
-  .glass-button {
-    @apply bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+  /* Minimal animation utilities */
+  .gentle-bounce {
+    animation: gentle-bounce 3s ease-in-out infinite;
   }
   
-  .glass-card {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl;
+  .slow-fade {
+    animation: slow-fade 4s ease-in-out infinite;
   }
+}
+
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes slow-fade {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
 }
 
 #root {
