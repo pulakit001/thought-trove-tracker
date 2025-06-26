@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Lightbulb } from "lucide-react";
 
 interface BrandIconProps {
   className?: string;
@@ -8,11 +9,9 @@ interface BrandIconProps {
 
 const BrandIcon: React.FC<BrandIconProps> = ({ className = "", size = 24 }) => {
   return (
-    <img
-      src="/lovable-uploads/d1f2ecf0-70de-4b1d-b21a-bf4bd3b5f58e.png"
-      alt="Brand Icon"
+    <Lightbulb 
       className={`inline-block ${className}`}
-      style={{ width: size, height: size }}
+      size={size}
     />
   );
 };
