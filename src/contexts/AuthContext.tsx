@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -18,34 +19,77 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Default local user - everyone uses the same local account
-const LOCAL_USER: User = {
-  id: "local_user",
-  email: "local@user.com",
-  name: "Local User"
-};
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Automatically set the local user as authenticated
-    setUser(LOCAL_USER);
+    // Check if user is already logged in
+    const storedUser = localStorage.getItem("auth_user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Failed to parse stored user:", error);
+        localStorage.removeItem("auth_user");
+      }
+    }
     setLoading(false);
   }, []);
 
-  // These functions are kept for compatibility but don't do anything
   const login = async (email: string, password: string) => {
-    setUser(LOCAL_USER);
+    try {
+      setLoading(true);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // For demo purposes, accept any email/password combination
+      const user: User = {
+        id: `user_${Date.now()}`,
+        email,
+        name: email.split('@')[0], // Use email prefix as name
+      };
+      
+      setUser(user);
+      localStorage.setItem("auth_user", JSON.stringify(user));
+      toast.success("Successfully logged in!");
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signup = async (email: string, password: string, name: string) => {
-    setUser(LOCAL_USER);
+    try {
+      setLoading(true);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const user: User = {
+        id: `user_${Date.now()}`,
+        email,
+        name,
+      };
+      
+      setUser(user);
+      localStorage.setItem("auth_user", JSON.stringify(user));
+      toast.success("Account created successfully!");
+    } catch (error) {
+      toast.error("Signup failed. Please try again.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
-    // Do nothing - user stays logged in locally
+    setUser(null);
+    localStorage.removeItem("auth_user");
+    toast.success("Successfully logged out!");
   };
 
   return (
@@ -56,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         signup,
         logout,
-        isAuthenticated: true, // Always authenticated locally
+        isAuthenticated: !!user,
       }}
     >
       {children}
