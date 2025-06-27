@@ -22,7 +22,7 @@ const Header: React.FC = () => {
         <div className="flex items-center cursor-pointer" onClick={() => navigate("/dashboard")}>
           <LightbulbIcon className="h-6 w-6 text-primary mr-2" />
           <span className="font-bold text-xl hidden sm:inline-block">
-            IdeasApp
+            Sparky
           </span>
         </div>
 
