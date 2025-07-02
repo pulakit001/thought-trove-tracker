@@ -1,0 +1,18 @@
+
+{
+  "name": "Sparky – Save what you think",
+  "short_name": "Sparky",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#0026FF",
+  "theme_color": "#0026FF",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
