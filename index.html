@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,9 +19,14 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="format-detection" content="telephone=no" />
     
-    <!-- Fullscreen support -->
+    <!-- Enhanced Fullscreen Support -->
     <meta name="apple-touch-fullscreen" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Prevent browser zoom and selection -->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="format-detection" content="telephone=no" />
     
     <!-- Manifest -->
     <link rel="manifest" href="/manifest.json" />
@@ -42,6 +48,41 @@
     <meta name="twitter:title" content="Sparky – Save what you think" />
     <meta name="twitter:description" content="A simple, intuitive app for storing, managing, and organizing your ideas securely" />
     <meta name="twitter:image" content="https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png" />
+    
+    <!-- Splash Screen Styling -->
+    <style>
+      /* Splash screen with blue background */
+      body {
+        background-color: #0026FF;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      
+      /* Hide scrollbars completely */
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      
+      * {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      
+      /* Prevent text selection and highlighting */
+      * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+      }
+      
+      /* Disable tap highlight */
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
   </head>
 
   <body>

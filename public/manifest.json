@@ -1,3 +1,4 @@
+
 {
   "name": "Sparky – Save what you think",
   "short_name": "Sparky",
@@ -6,7 +7,7 @@
   "scope": "/",
   "display": "fullscreen",
   "orientation": "portrait-primary",
-  "background_color": "#ffffff",
+  "background_color": "#0026FF",
   "theme_color": "#0026FF",
   "categories": ["productivity", "lifestyle"],
   "lang": "en",
