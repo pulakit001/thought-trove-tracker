@@ -1,11 +1,10 @@
-
 {
   "name": "Sparky – Save what you think",
   "short_name": "Sparky",
   "description": "A simple, intuitive app for storing, managing, and organizing your ideas securely",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#0026FF",
@@ -15,6 +14,7 @@
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
   "icons": [
     {
       "src": "https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png",
