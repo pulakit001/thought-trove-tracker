@@ -12,6 +12,9 @@
   "categories": ["productivity", "lifestyle"],
   "lang": "en",
   "dir": "ltr",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png",
@@ -48,6 +51,20 @@
       "sizes": "48x48",
       "type": "image/png",
       "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }
