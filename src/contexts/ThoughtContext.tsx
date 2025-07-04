@@ -9,7 +9,6 @@ export interface Thought {
   location: string;
   createdAt: string;
   updatedAt: string;
-  userId: string;
 }
 
 interface ThoughtContextType {
@@ -23,8 +22,8 @@ interface ThoughtContextType {
 
 const ThoughtContext = createContext<ThoughtContextType | undefined>(undefined);
 
-// Mock database
-const MOCK_THOUGHTS: Record<string, Thought> = {};
+// Local storage key
+const LOCAL_STORAGE_KEY = "sparky_thoughts";
 
 export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [thoughts, setThoughts] = useState<Thought[]>([]);
@@ -38,32 +37,25 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const loadThoughts = async () => {
     setLoading(true);
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Simulate loading delay
+      await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Get thoughts from localStorage or create empty array
-      const storedThoughts = localStorage.getItem("thoughts");
-      let parsedThoughts: Record<string, Thought> = {};
+      const storedThoughts = localStorage.getItem(LOCAL_STORAGE_KEY);
+      let parsedThoughts: Thought[] = [];
       
       if (storedThoughts) {
         try {
           parsedThoughts = JSON.parse(storedThoughts);
         } catch (error) {
           console.error("Failed to parse stored thoughts:", error);
-          localStorage.removeItem("thoughts");
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
         }
       }
       
-      // Merge with mock thoughts
-      Object.assign(MOCK_THOUGHTS, parsedThoughts);
-      
-      // Get all thoughts (no user filtering needed now)
-      const allThoughts = Object.values(MOCK_THOUGHTS);
-      
       // Sort by creation date (newest first)
-      allThoughts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      parsedThoughts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      setThoughts(allThoughts);
+      setThoughts(parsedThoughts);
     } catch (error) {
       toast.error("Failed to load thoughts");
       console.error(error);
@@ -72,8 +64,8 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const saveThoughtsToStorage = () => {
-    localStorage.setItem("thoughts", JSON.stringify(MOCK_THOUGHTS));
+  const saveThoughtsToStorage = (updatedThoughts: Thought[]) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedThoughts));
   };
 
   const addThought = async (title: string, description: string, location: string): Promise<Thought> => {
@@ -90,15 +82,11 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
         location,
         createdAt: now,
         updatedAt: now,
-        userId: "local_user", // Always use local user
       };
       
-      // Add to mock database
-      MOCK_THOUGHTS[newThought.id] = newThought;
-      saveThoughtsToStorage();
-      
-      // Update state
-      setThoughts(prev => [newThought, ...prev]);
+      const updatedThoughts = [newThought, ...thoughts];
+      setThoughts(updatedThoughts);
+      saveThoughtsToStorage(updatedThoughts);
       
       toast.success("Thought created successfully");
       return newThought;
@@ -114,29 +102,24 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const updateThought = async (id: string, title: string, description: string, location: string): Promise<Thought> => {
     setLoading(true);
     try {
-      // Check if thought exists
-      const thought = MOCK_THOUGHTS[id];
-      if (!thought) throw new Error("Thought not found");
+      const existingThought = thoughts.find(thought => thought.id === id);
+      if (!existingThought) throw new Error("Thought not found");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Update thought
       const now = new Date().toISOString();
       const updatedThought: Thought = {
-        ...thought,
+        ...existingThought,
         title,
         description,
         location,
         updatedAt: now,
       };
       
-      // Update mock database
-      MOCK_THOUGHTS[id] = updatedThought;
-      saveThoughtsToStorage();
-      
-      // Update state
-      setThoughts(prev => prev.map(item => (item.id === id ? updatedThought : item)));
+      const updatedThoughts = thoughts.map(thought => (thought.id === id ? updatedThought : thought));
+      setThoughts(updatedThoughts);
+      saveThoughtsToStorage(updatedThoughts);
       
       toast.success("Thought updated successfully");
       return updatedThought;
@@ -152,19 +135,15 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const deleteThought = async (id: string): Promise<void> => {
     setLoading(true);
     try {
-      // Check if thought exists
-      const thought = MOCK_THOUGHTS[id];
-      if (!thought) throw new Error("Thought not found");
+      const existingThought = thoughts.find(thought => thought.id === id);
+      if (!existingThought) throw new Error("Thought not found");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Delete from mock database
-      delete MOCK_THOUGHTS[id];
-      saveThoughtsToStorage();
-      
-      // Update state
-      setThoughts(prev => prev.filter(item => item.id !== id));
+      const updatedThoughts = thoughts.filter(thought => thought.id !== id);
+      setThoughts(updatedThoughts);
+      saveThoughtsToStorage(updatedThoughts);
       
       toast.success("Thought deleted successfully");
     } catch (error) {
@@ -177,7 +156,7 @@ export const ThoughtProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const getThought = (id: string): Thought | undefined => {
-    return MOCK_THOUGHTS[id];
+    return thoughts.find(thought => thought.id === id);
   };
 
   return (

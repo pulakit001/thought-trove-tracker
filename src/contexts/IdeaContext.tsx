@@ -8,7 +8,6 @@ export interface Idea {
   description: string;
   createdAt: string;
   updatedAt: string;
-  userId: string;
 }
 
 interface IdeaContextType {
@@ -22,8 +21,8 @@ interface IdeaContextType {
 
 const IdeaContext = createContext<IdeaContextType | undefined>(undefined);
 
-// Mock database
-const MOCK_IDEAS: Record<string, Idea> = {};
+// Local storage key
+const LOCAL_STORAGE_KEY = "sparky_ideas";
 
 export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -37,32 +36,25 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadIdeas = async () => {
     setLoading(true);
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Simulate loading delay
+      await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Get ideas from localStorage or create empty array
-      const storedIdeas = localStorage.getItem("ideas");
-      let parsedIdeas: Record<string, Idea> = {};
+      const storedIdeas = localStorage.getItem(LOCAL_STORAGE_KEY);
+      let parsedIdeas: Idea[] = [];
       
       if (storedIdeas) {
         try {
           parsedIdeas = JSON.parse(storedIdeas);
         } catch (error) {
           console.error("Failed to parse stored ideas:", error);
-          localStorage.removeItem("ideas");
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
         }
       }
       
-      // Merge with mock ideas
-      Object.assign(MOCK_IDEAS, parsedIdeas);
-      
-      // Get all ideas (no user filtering needed now)
-      const allIdeas = Object.values(MOCK_IDEAS);
-      
       // Sort by creation date (newest first)
-      allIdeas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      parsedIdeas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      setIdeas(allIdeas);
+      setIdeas(parsedIdeas);
     } catch (error) {
       toast.error("Failed to load ideas");
       console.error(error);
@@ -71,8 +63,8 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const saveIdeasToStorage = () => {
-    localStorage.setItem("ideas", JSON.stringify(MOCK_IDEAS));
+  const saveIdeasToStorage = (updatedIdeas: Idea[]) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedIdeas));
   };
 
   const addIdea = async (title: string, description: string): Promise<Idea> => {
@@ -88,15 +80,11 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description,
         createdAt: now,
         updatedAt: now,
-        userId: "local_user", // Always use local user
       };
       
-      // Add to mock database
-      MOCK_IDEAS[newIdea.id] = newIdea;
-      saveIdeasToStorage();
-      
-      // Update state
-      setIdeas(prev => [newIdea, ...prev]);
+      const updatedIdeas = [newIdea, ...ideas];
+      setIdeas(updatedIdeas);
+      saveIdeasToStorage(updatedIdeas);
       
       toast.success("Idea created successfully");
       return newIdea;
@@ -112,28 +100,23 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateIdea = async (id: string, title: string, description: string): Promise<Idea> => {
     setLoading(true);
     try {
-      // Check if idea exists
-      const idea = MOCK_IDEAS[id];
-      if (!idea) throw new Error("Idea not found");
+      const existingIdea = ideas.find(idea => idea.id === id);
+      if (!existingIdea) throw new Error("Idea not found");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Update idea
       const now = new Date().toISOString();
       const updatedIdea: Idea = {
-        ...idea,
+        ...existingIdea,
         title,
         description,
         updatedAt: now,
       };
       
-      // Update mock database
-      MOCK_IDEAS[id] = updatedIdea;
-      saveIdeasToStorage();
-      
-      // Update state
-      setIdeas(prev => prev.map(item => (item.id === id ? updatedIdea : item)));
+      const updatedIdeas = ideas.map(idea => (idea.id === id ? updatedIdea : idea));
+      setIdeas(updatedIdeas);
+      saveIdeasToStorage(updatedIdeas);
       
       toast.success("Idea updated successfully");
       return updatedIdea;
@@ -149,19 +132,15 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deleteIdea = async (id: string): Promise<void> => {
     setLoading(true);
     try {
-      // Check if idea exists
-      const idea = MOCK_IDEAS[id];
-      if (!idea) throw new Error("Idea not found");
+      const existingIdea = ideas.find(idea => idea.id === id);
+      if (!existingIdea) throw new Error("Idea not found");
       
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Delete from mock database
-      delete MOCK_IDEAS[id];
-      saveIdeasToStorage();
-      
-      // Update state
-      setIdeas(prev => prev.filter(item => item.id !== id));
+      const updatedIdeas = ideas.filter(idea => idea.id !== id);
+      setIdeas(updatedIdeas);
+      saveIdeasToStorage(updatedIdeas);
       
       toast.success("Idea deleted successfully");
     } catch (error) {
@@ -174,7 +153,7 @@ export const IdeaProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getIdea = (id: string): Idea | undefined => {
-    return MOCK_IDEAS[id];
+    return ideas.find(idea => idea.id === id);
   };
 
   return (

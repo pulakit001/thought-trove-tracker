@@ -4,16 +4,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { IdeaProvider } from "@/contexts/IdeaContext";
 import { ThoughtProvider } from "@/contexts/ThoughtContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import MobileNav from "@/components/layout/MobileNav";
 
 // Pages
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import NewIdea from "./pages/NewIdea";
 import EditIdea from "./pages/EditIdea";
@@ -24,86 +20,28 @@ import AI from "./pages/AI";
 
 const queryClient = new QueryClient();
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useAuth();
-  
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse">Loading...</div>
-      </div>
-    );
-  }
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return <>{children}</>;
-};
-
 const AppRoutes = () => {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse">Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <>
       <Routes>
-        {/* Public routes */}
-        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Index />} />
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} />
-        <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Signup />} />
+        {/* Redirect root to dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         
-        {/* Protected routes */}
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/new" element={
-          <ProtectedRoute>
-            <NewIdea />
-          </ProtectedRoute>
-        } />
-        <Route path="/edit/:id" element={
-          <ProtectedRoute>
-            <EditIdea />
-          </ProtectedRoute>
-        } />
-        <Route path="/thoughts" element={
-          <ProtectedRoute>
-            <Thoughts />
-          </ProtectedRoute>
-        } />
-        <Route path="/new-thought" element={
-          <ProtectedRoute>
-            <NewThought />
-          </ProtectedRoute>
-        } />
-        <Route path="/edit-thought/:id" element={
-          <ProtectedRoute>
-            <EditThought />
-          </ProtectedRoute>
-        } />
-        <Route path="/ai" element={
-          <ProtectedRoute>
-            <AI />
-          </ProtectedRoute>
-        } />
+        {/* App routes */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/new" element={<NewIdea />} />
+        <Route path="/edit/:id" element={<EditIdea />} />
+        <Route path="/thoughts" element={<Thoughts />} />
+        <Route path="/new-thought" element={<NewThought />} />
+        <Route path="/edit-thought/:id" element={<EditThought />} />
+        <Route path="/ai" element={<AI />} />
         
         {/* Catch-all route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
       
-      {/* Show mobile nav only when authenticated */}
-      {isAuthenticated && <MobileNav />}
+      {/* Always show mobile nav */}
+      <MobileNav />
     </>
   );
 };
@@ -112,17 +50,15 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <ThemeProvider>
-        <AuthProvider>
-          <IdeaProvider>
-            <ThoughtProvider>
-              <Toaster />
-              <Sonner position="top-right" />
-              <BrowserRouter>
-                <AppRoutes />
-              </BrowserRouter>
-            </ThoughtProvider>
-          </IdeaProvider>
-        </AuthProvider>
+        <IdeaProvider>
+          <ThoughtProvider>
+            <Toaster />
+            <Sonner position="top-right" />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ThoughtProvider>
+        </IdeaProvider>
       </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
