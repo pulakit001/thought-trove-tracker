@@ -16,6 +16,9 @@
     "client_mode": "navigate-existing"
   },
   "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "prefer_related_applications": false,
+  "shortcuts": [],
+  "edge_side_panel": {},
   "icons": [
     {
       "src": "https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png",
