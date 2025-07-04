@@ -3,33 +3,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
     <title>Sparky – Save what you think</title>
     <meta name="description" content="A simple, intuitive app for storing, managing, and organizing your ideas securely" />
     <meta name="author" content="Sparky Team" />
     <meta name="keywords" content="ideas, notes, productivity, organization, secure storage" />
     
-    <!-- PWA Meta Tags -->
+    <!-- PWA Meta Tags for Native App Behavior -->
     <meta name="theme-color" content="#0026FF" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Sparky" />
+    <meta name="apple-touch-fullscreen" content="yes" />
     <meta name="msapplication-TileColor" content="#0026FF" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="format-detection" content="telephone=no" />
     
-    <!-- Enhanced Fullscreen Support -->
-    <meta name="apple-touch-fullscreen" content="yes" />
+    <!-- TWA and Fullscreen Optimization -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="full-screen" content="yes" />
+    <meta name="browsermode" content="application" />
+    <meta name="screen-orientation" content="portrait" />
     
-    <!-- Prevent browser zoom and selection -->
+    <!-- Prevent browser zoom, selection, and context menus -->
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="format-detection" content="telephone=no" />
     
     <!-- Manifest -->
     <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Digital Asset Links for TWA -->
+    <link rel="digital-asset-links" href="/.well-known/assetlinks.json" />
     
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png" />
@@ -49,19 +55,34 @@
     <meta name="twitter:description" content="A simple, intuitive app for storing, managing, and organizing your ideas securely" />
     <meta name="twitter:image" content="https://ik.imagekit.io/noj8wurze/Screenshot%202025-03-05%20193639.png" />
     
-    <!-- Splash Screen Styling -->
+    <!-- Native App Styling for Maximum Immersion -->
     <style>
-      /* Splash screen with blue background */
+      /* Full immersion splash screen with blue background */
       body {
         background-color: #0026FF;
         margin: 0;
         padding: 0;
         overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height for mobile */
+        position: fixed;
+        top: 0;
+        left: 0;
       }
       
-      /* Hide scrollbars completely */
+      #root {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
+      
+      /* Completely hide all scrollbars */
       ::-webkit-scrollbar {
         display: none;
+        width: 0;
+        height: 0;
       }
       
       * {
@@ -69,18 +90,43 @@
         scrollbar-width: none;
       }
       
-      /* Prevent text selection and highlighting */
+      /* Prevent text selection, highlighting, and browser interactions */
       * {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
         -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-highlight-color: transparent;
       }
       
-      /* Disable tap highlight */
+      /* Disable context menus and long press */
       * {
-        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      /* Force fullscreen behavior */
+      html, body {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+      }
+      
+      /* Prevent zoom and scaling */
+      input, textarea, select {
+        font-size: 16px; /* Prevents zoom on iOS */
       }
     </style>
   </head>
@@ -90,5 +136,35 @@
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- TWA and Native App JavaScript -->
+    <script>
+      // Force fullscreen mode on Android
+      if (window.screen && window.screen.orientation) {
+        window.screen.orientation.lock('portrait').catch(() => {});
+      }
+      
+      // Hide address bar on scroll (fallback)
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          window.scrollTo(0, 1);
+        }, 100);
+      });
+      
+      // Prevent zoom gestures
+      document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+      });
+      
+      // Prevent context menu
+      document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+      });
+      
+      // Prevent drag and drop
+      document.addEventListener('dragstart', function (e) {
+        e.preventDefault();
+      });
+    </script>
   </body>
 </html>

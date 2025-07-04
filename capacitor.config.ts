@@ -11,7 +11,27 @@ const config: CapacitorConfig = {
   },
   android: {
     allowMixedContent: true,
-    captureInput: true
+    captureInput: true,
+    webContentsDebuggingEnabled: false,
+    appendUserAgent: 'Sparky-Native-App',
+    overrideUserAgent: 'Sparky/1.0 (Android; Mobile; TWA)',
+    backgroundColor: '#0026FF'
+  },
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: '#0026FF',
+      androidSplashResourceName: 'splash',
+      androidScaleType: 'CENTER_CROP',
+      showSpinner: false,
+      splashFullScreen: true,
+      splashImmersive: true
+    },
+    StatusBar: {
+      style: 'dark',
+      backgroundColor: '#0026FF',
+      overlaysWebView: false
+    }
   }
 };
 
