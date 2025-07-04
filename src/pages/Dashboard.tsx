@@ -12,24 +12,14 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 container py-8 pb-24 md:pb-8">
-        {/* App Title */}
-        <AnimatedContainer animation="fade" className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-primary mb-2">Sparky</h1>
-        </AnimatedContainer>
-
         <AnimatedContainer animation="fade" className="mb-8">
-          <h2 className="text-3xl font-bold">My Ideas</h2>
+          <h1 className="text-3xl font-bold">My Ideas</h1>
           <p className="text-muted-foreground">
             You have {ideas.length} {ideas.length === 1 ? "idea" : "ideas"}
           </p>
         </AnimatedContainer>
 
         <IdeaList />
-
-        {/* Footer */}
-        <div className="text-center mt-12 pt-8">
-          <p className="text-xs text-muted-foreground">Made by Snippetz Labs</p>
-        </div>
       </main>
     </div>
   );
