@@ -2,7 +2,6 @@
 import React from "react";
 import Header from "@/components/layout/Header";
 import ThoughtList from "@/components/thoughts/ThoughtList";
-import AnimatedContainer from "@/components/ui/AnimatedContainer";
 import { useThoughts } from "@/contexts/ThoughtContext";
 
 const Thoughts: React.FC = () => {
@@ -11,13 +10,13 @@ const Thoughts: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container py-8 pb-24 md:pb-8">
-        <AnimatedContainer animation="fade" className="mb-8">
-          <h1 className="text-3xl font-bold">My Thoughts</h1>
-          <p className="text-muted-foreground">
-            You have {thoughts.length} {thoughts.length === 1 ? "thought" : "thoughts"}
+      <main className="flex-1 page-container pb-24">
+        <div className="mb-8">
+          <h1 className="font-mono text-2xl font-bold uppercase tracking-wide mb-2">MY THOUGHTS</h1>
+          <p className="font-mono text-sm text-muted-foreground">
+            [{thoughts.length} {thoughts.length === 1 ? "THOUGHT" : "THOUGHTS"}]
           </p>
-        </AnimatedContainer>
+        </div>
 
         <ThoughtList />
       </main>

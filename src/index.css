@@ -1,86 +1,90 @@
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 221.2 83% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 0 0% 85%;
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 0% 20%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 85.4%;
-    --input: 214.3 31.8% 85.4%;
-    --ring: 221.2 83% 53.3%;
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
+    --ring: 0 0% 0%;
 
-    --radius: 1rem;
+    --radius: 0;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 0%;
+    --sidebar-ring: 0 0% 0%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 0% 80%;
+    --destructive-foreground: 0 0% 0%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 100%;
     
-    --sidebar-background: 222.2 84% 4.9%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217.2 91.2% 59.8%;
-    --sidebar-primary-foreground: 222.2 47.4% 11.2%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 100%;
+    --sidebar-ring: 0 0% 100%;
   }
   
   .high-contrast {
@@ -129,8 +133,10 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    @apply bg-background text-foreground;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    line-height: 1.4;
   }
 
   /* Firefox scrollbar */
@@ -173,53 +179,52 @@
 }
 
 @layer components {
-  .glass {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm dark:bg-black/50 dark:border-white/10 high-contrast:bg-black high-contrast:border-white/40;
+  .brutalist-container {
+    @apply border-2 border-foreground bg-background;
   }
   
-  .glass-dark {
-    @apply bg-black/50 backdrop-blur-md border border-white/10 shadow-md dark:bg-black/70 high-contrast:bg-black high-contrast:border-white/40;
+  .brutalist-input {
+    @apply border-2 border-foreground bg-background font-mono text-foreground p-2 focus:outline-none;
   }
   
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+  .brutalist-button {
+    @apply border-2 border-foreground bg-background text-foreground font-mono p-2 active:bg-foreground active:text-background transition-none;
   }
   
-  .button-scale {
-    @apply active:scale-95 transition-transform;
+  .brutalist-text-button {
+    @apply underline text-foreground font-mono cursor-pointer hover:bg-foreground hover:text-background p-1 transition-none;
   }
   
-  .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 high-contrast:focus-visible:ring-primary high-contrast:focus-visible:ring-offset-4;
+  .brutalist-nav {
+    @apply border-t-2 border-foreground bg-background;
+  }
+  
+  .brutalist-nav-item {
+    @apply border-r-2 border-foreground last:border-r-0 flex-1 text-center py-3 text-foreground font-mono uppercase text-sm tracking-wide;
+  }
+  
+  .brutalist-nav-item.active {
+    @apply bg-foreground text-background;
+  }
+  
+  .brutalist-card {
+    @apply border-2 border-foreground bg-background p-4 mb-4;
+  }
+  
+  .brutalist-grid {
+    @apply grid grid-cols-1 gap-px bg-foreground;
+  }
+  
+  .brutalist-grid-item {
+    @apply bg-background p-4;
+  }
+  
+  .brutalist-header {
+    @apply border-b-2 border-foreground bg-background;
   }
   
   .page-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10;
-  }
-
-  /* Enhanced container styling with thicker borders */
-  .enhanced-container {
-    @apply border-2 border-border shadow-sm rounded-lg;
-  }
-  
-  .high-contrast .enhanced-container {
-    @apply border-primary border-2;
-  }
-  
-  .enhanced-input {
-    @apply border-2 focus:border-primary/70;
-  }
-  
-  .high-contrast .enhanced-input {
-    @apply border-primary;
-  }
-  
-  .enhanced-card {
-    @apply border-2 shadow-md;
-  }
-  
-  .high-contrast .enhanced-card {
-    @apply border-primary;
+    @apply max-w-md mx-auto px-4 py-4;
   }
 }
 

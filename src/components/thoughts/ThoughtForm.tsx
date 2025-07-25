@@ -76,81 +76,65 @@ const ThoughtForm: React.FC<ThoughtFormProps> = ({ mode, thought }) => {
   };
 
   return (
-    <AnimatedContainer animation="fade" className="w-full relative">
+    <div className="w-full relative">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
+          <label htmlFor="title" className="font-mono text-sm uppercase tracking-wide">TITLE:</label>
           <Input
             id="title"
-            placeholder="Enter a title for your thought"
+            placeholder="[ enter a title for your thought ]"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="h-12 enhanced-input"
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <label htmlFor="description" className="font-mono text-sm uppercase tracking-wide">DESCRIPTION:</label>
           <Textarea
             id="description"
-            placeholder="Describe your thought in detail..."
+            placeholder="[ describe your thought in detail... ]"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-            className="min-h-[200px] resize-none enhanced-input"
+            className="min-h-[200px]"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
-          <div className="relative">
-            <Input
-              id="location"
-              placeholder="Where did you have this thought?"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="h-12 pl-10 enhanced-input"
-            />
-            <MapPin className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-          </div>
+          <label htmlFor="location" className="font-mono text-sm uppercase tracking-wide">LOCATION:</label>
+          <Input
+            id="location"
+            placeholder="[ where did you have this thought? ]"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
         </div>
         
-        <div className="flex items-center justify-end gap-4">
-          <Button 
+        <div className="flex gap-4">
+          <button 
             type="button" 
-            variant="outline"
+            className="brutalist-text-button"
             onClick={() => navigate("/thoughts")}
-            className="px-6 enhanced-container"
           >
-            Cancel
-          </Button>
+            CANCEL
+          </button>
           
-          <Button
+          <button
             type="submit"
             disabled={isSubmitting}
-            className="px-6 enhanced-container"
+            className="brutalist-text-button"
           >
-            {isSubmitting ? (
-              <>
-                <LucideLoader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save Thought
-              </>
-            )}
-          </Button>
+            {isSubmitting ? "SAVING..." : "SAVE THOUGHT"}
+          </button>
         </div>
       </form>
       
       {/* Voice recorder floating action button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-20 right-4 z-50">
         <VoiceRecorder onTranscriptionComplete={processTranscription} />
       </div>
-    </AnimatedContainer>
+    </div>
   );
 };
 

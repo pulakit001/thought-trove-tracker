@@ -56,48 +56,33 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea, delay = 0 }) => {
 
   return (
     <>
-      <AnimatedContainer 
-        animation="slide-up" 
-        delay={delay} 
-        className="card-hover"
-      >
-        <Card className="overflow-hidden border-border/40">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-2 line-clamp-1">{idea.title}</h3>
-            
-            <div className="flex items-center text-sm text-muted-foreground mb-4">
-              <Clock className="w-4 h-4 mr-1" />
-              <span>{formatDate(idea.createdAt)}</span>
-            </div>
-            
-            <p className="text-foreground/80 line-clamp-3">
-              {idea.description}
-            </p>
-          </CardContent>
+      <div className="brutalist-card mb-4">
+        <h3 className="font-mono text-lg font-bold uppercase tracking-wide mb-2">{idea.title}</h3>
+        
+        <div className="font-mono text-xs text-muted-foreground mb-4">
+          [{formatDate(idea.createdAt)}]
+        </div>
+        
+        <p className="font-mono text-sm mb-4">
+          {idea.description}
+        </p>
+        
+        <div className="flex gap-4 pt-4 border-t-2 border-foreground">
+          <button
+            className="brutalist-text-button text-xs"
+            onClick={() => navigate(`/edit/${idea.id}`)}
+          >
+            EDIT
+          </button>
           
-          <CardFooter className="px-6 py-4 bg-muted/30 flex justify-between">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(`/edit/${idea.id}`)}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Edit
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowDeleteDialog(true)}
-              className="text-muted-foreground hover:text-destructive"
-            >
-              <Trash2 className="w-4 h-4 mr-2" />
-              Delete
-            </Button>
-          </CardFooter>
-        </Card>
-      </AnimatedContainer>
+          <button
+            className="brutalist-text-button text-xs"
+            onClick={() => setShowDeleteDialog(true)}
+          >
+            DELETE
+          </button>
+        </div>
+      </div>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>

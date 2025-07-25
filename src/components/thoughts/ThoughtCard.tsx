@@ -56,57 +56,34 @@ const ThoughtCard: React.FC<ThoughtCardProps> = ({ thought, delay = 0 }) => {
 
   return (
     <>
-      <AnimatedContainer 
-        animation="slide-up" 
-        delay={delay} 
-        className="card-hover"
-      >
-        <Card className="overflow-hidden border-border/40">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-2 line-clamp-1">{thought.title}</h3>
-            
-            <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-              <div className="flex items-center">
-                <Clock className="w-4 h-4 mr-1" />
-                <span>{formatDate(thought.createdAt)}</span>
-              </div>
-              
-              {thought.location && (
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  <span className="line-clamp-1">{thought.location}</span>
-                </div>
-              )}
-            </div>
-            
-            <p className="text-foreground/80 line-clamp-3">
-              {thought.description}
-            </p>
-          </CardContent>
+      <div className="brutalist-card mb-4">
+        <h3 className="font-mono text-lg font-bold uppercase tracking-wide mb-2">{thought.title}</h3>
+        
+        <div className="flex justify-between font-mono text-xs text-muted-foreground mb-4">
+          <span>[{formatDate(thought.createdAt)}]</span>
+          {thought.location && <span>[{thought.location}]</span>}
+        </div>
+        
+        <p className="font-mono text-sm mb-4">
+          {thought.description}
+        </p>
+        
+        <div className="flex gap-4 pt-4 border-t-2 border-foreground">
+          <button
+            className="brutalist-text-button text-xs"
+            onClick={() => navigate(`/edit-thought/${thought.id}`)}
+          >
+            EDIT
+          </button>
           
-          <CardFooter className="px-6 py-4 bg-muted/30 flex justify-between">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(`/edit-thought/${thought.id}`)}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Edit
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowDeleteDialog(true)}
-              className="text-muted-foreground hover:text-destructive"
-            >
-              <Trash2 className="w-4 h-4 mr-2" />
-              Delete
-            </Button>
-          </CardFooter>
-        </Card>
-      </AnimatedContainer>
+          <button
+            className="brutalist-text-button text-xs"
+            onClick={() => setShowDeleteDialog(true)}
+          >
+            DELETE
+          </button>
+        </div>
+      </div>
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
