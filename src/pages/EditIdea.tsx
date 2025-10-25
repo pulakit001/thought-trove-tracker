@@ -70,13 +70,13 @@ const EditIdea: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container py-8">
-        <AnimatedContainer animation="fade" className="mb-8">
-          <h1 className="text-3xl font-bold">Edit Idea</h1>
-          <p className="text-muted-foreground">
-            Update and refine your idea
+      <main className="flex-1 page-container pb-24 overflow-y-auto">
+        <div className="mb-8">
+          <h1 className="font-mono text-2xl font-bold uppercase tracking-wide mb-2">EDIT IDEA</h1>
+          <p className="font-mono text-sm text-muted-foreground">
+            [UPDATE AND REFINE YOUR IDEA]
           </p>
-        </AnimatedContainer>
+        </div>
 
         <IdeaForm mode="edit" idea={idea} />
       </main>

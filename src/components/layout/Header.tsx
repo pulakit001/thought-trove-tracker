@@ -9,12 +9,15 @@ const Header: React.FC = () => {
   return (
     <div className="brutalist-header">
       <div className="page-container flex items-center justify-between py-4">
-        <button 
-          className="font-mono text-xl font-bold uppercase tracking-wide"
-          onClick={() => navigate("/dashboard")}
-        >
-          SPARKY
-        </button>
+        <div className="flex flex-col gap-1">
+          <button 
+            className="font-mono text-xl font-bold uppercase tracking-wide"
+            onClick={() => navigate("/dashboard")}
+          >
+            SPARKY
+          </button>
+          <p className="font-mono text-[10px] text-muted-foreground">MADE BY SNIPPETZ LABS</p>
+        </div>
 
         <div className="flex items-center gap-4">
           <ThemeToggle />

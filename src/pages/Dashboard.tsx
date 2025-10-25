@@ -10,15 +10,12 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 page-container pb-24">
+      <main className="flex-1 page-container pb-24 overflow-y-auto">
         <div className="mb-8">
           <h1 className="font-mono text-2xl font-bold uppercase tracking-wide mb-2">MY IDEAS</h1>
           <p className="font-mono text-sm text-muted-foreground">
             [{ideas.length} {ideas.length === 1 ? "IDEA" : "IDEAS"}]
           </p>
-          <div className="text-center mb-4 mt-8">
-            <p className="font-mono text-xs text-muted-foreground">MADE BY SNIPPETZ LABS</p>
-          </div>
         </div>
 
         <IdeaList />
