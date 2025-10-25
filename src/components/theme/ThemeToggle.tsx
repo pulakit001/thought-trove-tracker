@@ -14,13 +14,18 @@ import AnimatedContainer from "@/components/ui/AnimatedContainer";
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
+  const getThemeIcon = () => {
+    if (theme === "dark") return <Moon className="h-[1.2rem] w-[1.2rem]" />;
+    if (theme === "high-contrast") return <EyeIcon className="h-[1.2rem] w-[1.2rem]" />;
+    return <Sun className="h-[1.2rem] w-[1.2rem]" />;
+  };
+
   return (
     <AnimatedContainer animation="fade">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon" className="relative brutalist-button">
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0 dark:hidden" />
-            <Moon className="h-[1.2rem] w-[1.2rem] hidden dark:block" />
+          <Button variant="outline" size="icon" className="brutalist-button">
+            {getThemeIcon()}
             <span className="sr-only">Toggle theme</span>
           </Button>
         </DropdownMenuTrigger>
