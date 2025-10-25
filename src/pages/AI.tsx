@@ -6,7 +6,7 @@ const AI: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <Header />
       <main className="flex-1 page-container pb-24 flex flex-col overflow-y-auto">
         <div className="mb-4">

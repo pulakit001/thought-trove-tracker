@@ -68,7 +68,7 @@ const EditIdea: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <Header />
       <main className="flex-1 page-container pb-24 overflow-y-auto">
         <div className="mb-8">
